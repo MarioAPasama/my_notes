@@ -6,8 +6,8 @@ entity mst_users {
     phone: VARCHAR(20)
     email: VARCHAR(100) [UNIQUE]
     status: ENUM('active', 'inactive', 'suspended') [DEFAULT 'active']
-    is_deleted: TINYINT(1) [DEFAULT 0]   -- Status aktif/nonaktif (1 = deleted)
-    deleted_at: TIMESTAMP (nullable)      -- Waktu penghapusan
+    is_deleted: TINYINT(1) [DEFAULT 0]
+    deleted_at: TIMESTAMP (nullable)
     updated_at: TIMESTAMP
     created_at: TIMESTAMP
 }
@@ -40,7 +40,18 @@ entity user_sso_logins {
     created_at: TIMESTAMP
 }
 
+entity user_otp_logins {
+    + otp_id: INT [PK, AI]
+    --
+    user_id: INT [FK -> users_logins.user_id]
+    otp_code: VARCHAR(6)
+    expires_at: TIMESTAMP
+    is_used: TINYINT(1) [DEFAULT 0]
+    created_at: TIMESTAMP
+}
+
 mst_users ||--|| users_logins : "Has One"
 users_logins ||--o{ user_sso_logins : "Can have multiple"
 ref_sso_providers ||--o{ user_sso_logins : "Used by"
+users_logins ||--o{ user_otp_logins : "Can have multiple OTPs"
 @enduml
