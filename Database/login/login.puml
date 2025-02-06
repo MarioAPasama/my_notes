@@ -1,10 +1,11 @@
 @startuml
 entity mst_users {
-    + mst_user_id: INT [PK, AI]
+    + user_id: INT [PK, AI]
     --
     full_name: VARCHAR(100)
-    phone: VARCHAR(15)
+    phone: VARCHAR(20)
     email: VARCHAR(100) [UNIQUE]
+    status: ENUM('active', 'inactive', 'suspended') [DEFAULT 'active']
     is_deleted: TINYINT(1) [DEFAULT 0]   -- Status aktif/nonaktif (1 = deleted)
     deleted_at: TIMESTAMP (nullable)      -- Waktu penghapusan
     updated_at: TIMESTAMP
@@ -12,14 +13,12 @@ entity mst_users {
 }
 
 entity users_logins {
-    + mst_user_id: INT [PK, FK -> mst_users.mst_user_id]
+    + user_id: INT [PK, FK -> mst_users.user_id]
     --
     username: VARCHAR(50) [UNIQUE]
     password: VARCHAR(255) (nullable)
     last_login: TIMESTAMP
     last_logout: TIMESTAMP
-    is_deleted: TINYINT(1) [DEFAULT 0]   -- Status aktif/nonaktif (1 = deleted)
-    deleted_at: TIMESTAMP (nullable)      -- Waktu penghapusan
     updated_at: TIMESTAMP
     created_at: TIMESTAMP
 }
@@ -34,7 +33,7 @@ entity ref_sso_providers {
 entity user_sso_logins {
     + auth_id: INT [PK, AI]
     --
-    mst_user_id: INT [FK -> users_logins.mst_user_id]
+    user_id: INT [FK -> users_logins.user_id]
     provider_id: INT [FK -> ref_sso_providers.provider_id]
     provider_user_id: VARCHAR(255)
     token: TEXT
