@@ -1,0 +1,47 @@
+@startuml
+entity mst_users {
+    + mst_user_id: INT [PK, AI]
+    --
+    full_name: VARCHAR(100)
+    phone: VARCHAR(15)
+    email: VARCHAR(100) [UNIQUE]
+    is_deleted: TINYINT(1) [DEFAULT 0]   -- Status aktif/nonaktif (1 = deleted)
+    deleted_at: TIMESTAMP (nullable)      -- Waktu penghapusan
+    updated_at: TIMESTAMP
+    created_at: TIMESTAMP
+}
+
+entity users_logins {
+    + mst_user_id: INT [PK, FK -> mst_users.mst_user_id]
+    --
+    username: VARCHAR(50) [UNIQUE]
+    password: VARCHAR(255) (nullable)
+    last_login: TIMESTAMP
+    last_logout: TIMESTAMP
+    is_deleted: TINYINT(1) [DEFAULT 0]   -- Status aktif/nonaktif (1 = deleted)
+    deleted_at: TIMESTAMP (nullable)      -- Waktu penghapusan
+    updated_at: TIMESTAMP
+    created_at: TIMESTAMP
+}
+
+entity ref_sso_providers {
+    + provider_id: INT [PK, AI]
+    --
+    provider_name: VARCHAR(50)
+    auth_url: VARCHAR(255)
+}
+
+entity user_sso_logins {
+    + auth_id: INT [PK, AI]
+    --
+    mst_user_id: INT [FK -> users_logins.mst_user_id]
+    provider_id: INT [FK -> ref_sso_providers.provider_id]
+    provider_user_id: VARCHAR(255)
+    token: TEXT
+    created_at: TIMESTAMP
+}
+
+mst_users ||--|| users_logins : "Has One"
+users_logins ||--o{ user_sso_logins : "Can have multiple"
+ref_sso_providers ||--o{ user_sso_logins : "Used by"
+@enduml
