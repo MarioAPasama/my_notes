@@ -1,5 +1,5 @@
 # Database Design Documentation: Login System with SSO&#x20;
-![alt text](https://github.com/MarioAPasama/my_notes/blob/main/Database/login/login.png?raw=true)
+![alt text](https://github.com/MarioAPasama/my_notes/blob/main/Database/login/logindatabase.png?raw=true)
 ## **📌 Overview**
 
 This document describes the database design for a user authentication system that supports:
@@ -22,6 +22,7 @@ Stores personal user information separately from authentication data.
 | `full_name`   | VARCHAR(100)           | User's full name                      |
 | `phone`       | VARCHAR(15)            | Contact phone number                  |
 | `email`       | VARCHAR(100) [UNIQUE]  | User's email address                  |
+| `status`      | ENUM('active', 'inactive', 'suspended') [DEFAULT 'active']  | Status User                  |
 | `is_deleted`  | TINYINT(1) [DEFAULT 0] | Soft delete flag (1 = deleted)        |
 | `deleted_at`  | TIMESTAMP (nullable)   | Timestamp when the record was deleted |
 | `updated_at`  | TIMESTAMP              | Last update timestamp                 |
@@ -40,8 +41,6 @@ Stores authentication credentials separately from personal data.
 | `password`    | VARCHAR(255) (nullable)                | Encrypted user password   |
 | `last_login`  | TIMESTAMP (nullable)                   | Last login timestamp      |
 | `last_logout` | TIMESTAMP (nullable)                   | Last logout timestamp     |
-| `is_deleted`  | TINYINT(1) [DEFAULT 0]                 | Soft delete flag          |
-| `deleted_at`  | TIMESTAMP (nullable)                   | Timestamp when deleted    |
 | `updated_at`  | TIMESTAMP                              | Last update timestamp     |
 | `created_at`  | TIMESTAMP                              | Record creation timestamp |
 
