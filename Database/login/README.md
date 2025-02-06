@@ -1,5 +1,5 @@
 # Database Design Documentation: Login System with SSO&#x20;
-
+![alt text](https://github.com/MarioAPasama/my_notes/blob/main/Database/login/login.png?raw=true)
 ## **📌 Overview**
 
 This document describes the database design for a user authentication system that supports:
